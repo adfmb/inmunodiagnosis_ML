@@ -1,2 +1,2 @@
-# inmunodiagnostic_ML
-Desarrollo de un sistema de aprendizaje automático para asistir el diagnóstico clínico de inmunodeficiencias primarias
+# Description
+Development of an automatic learning system to assist the clinical diagnosis of primary immunodeficiencies
