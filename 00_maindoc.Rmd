@@ -1,0 +1,25 @@
+---
+title: "Dr. Good"
+runtime: shiny
+output:
+  flexdashboard::flex_dashboard:
+    logo: www/33_doctor-medical-pediatrician-male-128.png
+    orientation: rows
+    source_code: https://github.com/adfmb/inmunodiagnostic_ML
+    theme: journal
+subtitle: Inmunodiagnostic
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(png)
+library(dplyr)
+options(warn = 0)
+options(digits = 0)
+# library(shinyjs)
+# useShinyjs()
+```
+
+```{r , child = '00_registro.Rmd'}
+```
