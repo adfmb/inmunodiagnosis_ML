@@ -23,3 +23,6 @@ options(digits = 0)
 
 ```{r , child = '00_registro.Rmd'}
 ```
+
+```{r , child = '01_como_jugar.Rmd'}
+```
