@@ -25,17 +25,31 @@ nombres_dup<-df_names$Var1[df_names$Freq>1]
 names(USIDNET)[names(USIDNET)%in%as.character(nombres_dup)]
 names(USIDNET[names(USIDNET)%in%as.character(nombres_dup)])
 sub_usidnet<-USIDNET[names(USIDNET)%in%as.character(nombres_dup)]
+
+idcol<-11
+vars<-names(sub_usidnet)[c(idcol:14)]
+sub_usidnet_02<-sub_usidnet%>%
+  as_data_frame()%>%
+  # select(one_of(vars))%>%
+  mutate_at(vars,as.character)%>%
+  mutate_at(vars,as.numeric)%>%
+  rowwise()%>%
+  mutate_(.dots= setNames(paste0("max(",paste(vars,collapse=","),",na.rm = T)"),"vartmp"))%>%
+  arrange(vartmp)%>%
+  filter(!is.infinite(vartmp))%>%
+  select(-one_of(vars))%>%
+  rename(patient=vartmp)
 for(idcol in c(1,3,5,7,9)){
   # idcol<-1
   idcol_next<-idcol+1
   vars<-names(sub_usidnet)[c(idcol,idcol_next)]
   sub_tmp<-sub_usidnet%>%
     as_data_frame()%>%
-    select(one_of(vars))%>%
+    select(one_of(c("patient",vars)))%>%
     mutate_at(vars,as.character)%>%
     mutate_at(vars,as.numeric)%>%
     rowwise()%>%
-    mutate_(.dots= setNames(paste0("max(",paste(vars,collapse=","),")"),"vartmp"))%>%
+    mutate_(.dots= setNames(paste0("max(",paste(vars,collapse=","),",na.rm = T)"),"vartmp"))%>%
     arrange(desc(vartmp))%>%
     select(-one_of(vars))
 }
