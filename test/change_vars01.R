@@ -23,6 +23,12 @@ df_names<-df_names%>%
 
 nombres_dup<-df_names$Var1[df_names$Freq>1]
 cols_nombres_dup<-names(USIDNET)[names(USIDNET)%in%as.character(nombres_dup)]
+length(unique(USIDNET$patient))
+
+length(unique(USIDNET$patient[USIDNET$patient!=""]))
+sum(USIDNET$patient!="")
+
+match(1,(names(USIDNET)%in%as.character(nombres_dup)*1))
 indices<-c()
 for(col in as.character(nombres_dup)){
   # col<-as.character(nombres_dup)[1]
@@ -30,10 +36,10 @@ for(col in as.character(nombres_dup)){
 }
 sub_usidnet<-USIDNET[names(USIDNET)%in%as.character(nombres_dup)]
 View(sub_usidnet)
+names(USIDNET)[indices]
 
-
-
-
+indices2<-c(indices,(indices+1))
+names(USIDNET)[indices2]
 saveRDS(USIDNET,"data/USIDNET_02.rds")
 
 dic_nvasvars<-read.csv("data/Campos_USIDNET.csv",header = T)
