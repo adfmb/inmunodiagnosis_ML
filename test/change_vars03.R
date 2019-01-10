@@ -4,19 +4,19 @@ View(head(USIDNET))
 saveRDS(USIDNET,"data/USIDNET.rds")
 
 USIDNET<-USIDNET0
-USIDNET[1,]<-as.character(as.matrix(USIDNET)[1,])
-USIDNET[1,]<-gsub(" ","_",as.character(as.matrix(USIDNET)[1,]))
-USIDNET[1,]<-gsub("\\(","_",as.character(as.matrix(USIDNET)[1,]))
-USIDNET[1,]<-gsub("\\)","_",as.character(as.matrix(USIDNET)[1,]))
-USIDNET[1,]<-gsub("\\/","_",as.character(as.matrix(USIDNET)[1,]))
-USIDNET[1,]<-gsub("\\%","_",as.character(as.matrix(USIDNET)[1,]))
-USIDNET[1,]<-gsub("\\\n","__",as.character(as.matrix(USIDNET)[1,]))
-USIDNET[1,]<-gsub(",","_",as.character(as.matrix(USIDNET)[1,]))
-USIDNET[1,]<-gsub("-","_",as.character(as.matrix(USIDNET)[1,]))
-USIDNET[1,]<-gsub(":","_",as.character(as.matrix(USIDNET)[1,]))
+names(USIDNET)<-as.character(as.matrix(USIDNET)[1,])
+names(USIDNET)<-gsub(" ","_",names(USIDNET))
+names(USIDNET)<-gsub("\\(","_",names(USIDNET))
+names(USIDNET)<-gsub("\\)","_",names(USIDNET))
+names(USIDNET)<-gsub("\\/","_",names(USIDNET))
+names(USIDNET)<-gsub("\\%","_",names(USIDNET))
+names(USIDNET)<-gsub("\\\n","__",names(USIDNET))
+names(USIDNET)<-gsub(",","_",names(USIDNET))
+names(USIDNET)<-gsub("-","_",names(USIDNET))
+names(USIDNET)<-gsub(":","_",names(USIDNET))
 
 
-df_names<-as.data.frame(table(as.character(USIDNET[1,])))
+df_names<-as.data.frame(table(names(USIDNET)))
 df_names<-df_names%>%
   as_data_frame()%>%
   arrange(desc(Freq))
@@ -34,12 +34,18 @@ for(col in as.character(nombres_dup)){
   # col<-as.character(nombres_dup)[1]
   indices<-c(indices,match(col, names(USIDNET)))
 }
+names(USIDNET)[names(USIDNET)%in%as.character(nombres_dup)]
+names(USIDNET[names(USIDNET)%in%as.character(nombres_dup)])
 sub_usidnet<-USIDNET[names(USIDNET)%in%as.character(nombres_dup)]
-sub_usidnet2<-USIDNET[,grepl(as.character(nombres_dup),names(USIDNET))]
-
-grep(as.character(nombres_dup)[1],names(USIDNET))
+for(idcol in c(1,3,5,7,9)){
+  # idcol<-1
+  idcol_next<-idcol+1
+  vars<-names(sub_usidnet)[c(idcol,idcol_next)]
+  sub_tmp<-sub_usidnet%>%
+    as_data_frame()%>%
+    select(one_of(vars))
+}
 View(sub_usidnet)
-names(USIDNET)[indices]
 
 indices2<-c(indices,(indices+1))
 names(USIDNET)[indices2]
