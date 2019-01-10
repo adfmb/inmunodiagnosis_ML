@@ -77,3 +77,4 @@ for(idcol in c(2,4,6,8,10)){
 usidnet_univar<-sub_usidnet_04%>%
   left_join(no_sub_usidnet_03)
 
+saveRDS(usidnet_univar,"data/usidnet_univarrds")
