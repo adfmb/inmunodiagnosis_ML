@@ -42,6 +42,14 @@ nombres_dup<-df_names$Var1[df_names$Freq>1]
 nombres_dup<-nombres_dup[!nombres_dup%in%"patient"]
 nombres_dup2<-sort(c(as.character(nombres_dup),paste0(nombres_dup,".1")))
 sub_usidnet_03<-sub_usidnet_02[c("patient",as.character(nombres_dup2))]
+no_sub_usidnet_03<-sub_usidnet_02[!names(sub_usidnet_02)%in%as.character(nombres_dup2)]
+ncol(sub_usidnet_02)
+ncol(sub_usidnet_03)
+ncol(no_sub_usidnet_03)
+
+nrow(sub_usidnet_02)
+nrow(sub_usidnet_03)
+nrow(no_sub_usidnet_03)
 
 sub_usidnet_04<-sub_usidnet_03
 for(idcol in c(2,4,6,8,10)){
@@ -64,19 +72,8 @@ for(idcol in c(2,4,6,8,10)){
     select(-one_of(vars))%>%
     left_join(sub_tmp)
 }
-View(sub_usidnet)
-
-indices2<-c(indices,(indices+1))
-names(USIDNET)[indices2]
-saveRDS(USIDNET,"data/USIDNET_02.rds")
-
-dic_nvasvars<-read.csv("data/Campos_USIDNET.csv",header = T)
-dic_nvasvars$Campo.Antiguo
-names(bd1)[grep("Infection_Rash",names(bd1))]
-dic_nvasvars$Campo.Antiguo[grep("Infection_Rash",dic_nvasvars$Campo.Antiguo)]
-
-names(bd1)[grep("Infection_Pneumonitis",names(bd1))]
-dic_nvasvars$Campo.Antiguo[grep("Infection_Pneumonitis",dic_nvasvars$Campo.Antiguo)]
 
 
-## checar regular_expressions para las comas, los puntos, los espacios, diagonales, signos de porcentajes,etc etc etc
+usidnet_univar<-sub_usidnet_04%>%
+  left_join(no_sub_usidnet_03)
+
