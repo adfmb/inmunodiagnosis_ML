@@ -3,8 +3,8 @@ names(USIDNET)
 View(head(USIDNET))
 saveRDS(USIDNET,"data/USIDNET.rds")
 
-USIDNET<-USIDNET0
-names(USIDNET)<-as.character(as.matrix(USIDNET)[1,])
+USIDNET<-USIDNET0[-1,]
+names(USIDNET)<-as.character(as.matrix(USIDNET0)[1,])
 names(USIDNET)<-gsub(" ","_",names(USIDNET))
 names(USIDNET)<-gsub("\\(","_",names(USIDNET))
 names(USIDNET)<-gsub("\\)","_",names(USIDNET))
@@ -22,18 +22,6 @@ df_names<-df_names%>%
   arrange(desc(Freq))
 
 nombres_dup<-df_names$Var1[df_names$Freq>1]
-cols_nombres_dup<-names(USIDNET)[names(USIDNET)%in%as.character(nombres_dup)]
-length(unique(USIDNET$patient))
-
-length(unique(USIDNET$patient[USIDNET$patient!=""]))
-sum(USIDNET$patient!="")
-
-match(1,(names(USIDNET)%in%as.character(nombres_dup)*1))
-indices<-c()
-for(col in as.character(nombres_dup)){
-  # col<-as.character(nombres_dup)[1]
-  indices<-c(indices,match(col, names(USIDNET)))
-}
 names(USIDNET)[names(USIDNET)%in%as.character(nombres_dup)]
 names(USIDNET[names(USIDNET)%in%as.character(nombres_dup)])
 sub_usidnet<-USIDNET[names(USIDNET)%in%as.character(nombres_dup)]
@@ -43,7 +31,13 @@ for(idcol in c(1,3,5,7,9)){
   vars<-names(sub_usidnet)[c(idcol,idcol_next)]
   sub_tmp<-sub_usidnet%>%
     as_data_frame()%>%
-    select(one_of(vars))
+    select(one_of(vars))%>%
+    mutate_at(vars,as.character)%>%
+    mutate_at(vars,as.numeric)%>%
+    rowwise()%>%
+    mutate_(.dots= setNames(paste0("max(",paste(vars,collapse=","),")"),"vartmp"))%>%
+    arrange(desc(vartmp))%>%
+    select(-one_of(vars))
 }
 View(sub_usidnet)
 
