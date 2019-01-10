@@ -24,15 +24,8 @@ df_names<-df_names%>%
 USIDNET2<-USIDNET[names(USIDNET)%in%names(USIDNET)]
 names(USIDNET2)[names(USIDNET2)%in%as.character(nombres_dup)]
 names(USIDNET2[names(USIDNET2)%in%as.character(nombres_dup)])
-
-nombres_dup<-df_names$Var1[df_names$Freq>1]
-names(USIDNET)[names(USIDNET)%in%as.character(nombres_dup)]
-names(USIDNET[names(USIDNET)%in%as.character(nombres_dup)])
-sub_usidnet<-USIDNET[names(USIDNET)%in%as.character(nombres_dup)]
-
-idcol<-11
-vars<-names(sub_usidnet)[c(idcol:14)]
-sub_usidnet_02<-sub_usidnet%>%
+vars<-c("patient","patient.1","patient.2","patient.3")
+sub_usidnet_02<-USIDNET2%>%
   as_data_frame()%>%
   # select(one_of(vars))%>%
   mutate_at(vars,as.character)%>%
@@ -43,13 +36,20 @@ sub_usidnet_02<-sub_usidnet%>%
   filter(!is.infinite(vartmp))%>%
   select(-one_of(vars))%>%
   rename(patient=vartmp)
-sub_usidnet_03<-sub_usidnet_02
-for(idcol in c(1,3,5,7,9)){
+
+
+nombres_dup<-df_names$Var1[df_names$Freq>1]
+nombres_dup<-nombres_dup[!nombres_dup%in%"patient"]
+nombres_dup2<-sort(c(as.character(nombres_dup),paste0(nombres_dup,".1")))
+sub_usidnet_03<-sub_usidnet_02[c("patient",as.character(nombres_dup2))]
+
+sub_usidnet_04<-sub_usidnet_03
+for(idcol in c(2,4,6,8,10)){
   # idcol<-1
   idcol_next<-idcol+1
-  vars<-names(sub_usidnet_02)[c(idcol,idcol_next)]
+  vars<-names(sub_usidnet_03)[c(idcol,idcol_next)]
   print(vars)
-  sub_tmp<-sub_usidnet_02%>%
+  sub_tmp<-sub_usidnet_03%>%
     as_data_frame()%>%
     select(one_of(c("patient",vars)))%>%
     mutate_at(vars,as.character)%>%
@@ -60,7 +60,7 @@ for(idcol in c(1,3,5,7,9)){
     select(-one_of(vars))%>%
     rename_(.dots=setNames("vartmp",vars[1]))
   
-  sub_usidnet_03<-sub_usidnet_03%>%
+  sub_usidnet_04<-sub_usidnet_04%>%
     select(-one_of(vars))%>%
     left_join(sub_tmp)
 }
