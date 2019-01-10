@@ -39,19 +39,26 @@ sub_usidnet_02<-sub_usidnet%>%
   filter(!is.infinite(vartmp))%>%
   select(-one_of(vars))%>%
   rename(patient=vartmp)
+sub_usidnet_03<-sub_usidnet_02
 for(idcol in c(1,3,5,7,9)){
   # idcol<-1
   idcol_next<-idcol+1
-  vars<-names(sub_usidnet)[c(idcol,idcol_next)]
-  sub_tmp<-sub_usidnet%>%
+  vars<-names(sub_usidnet_02)[c(idcol,idcol_next)]
+  print(vars)
+  sub_tmp<-sub_usidnet_02%>%
     as_data_frame()%>%
     select(one_of(c("patient",vars)))%>%
     mutate_at(vars,as.character)%>%
     mutate_at(vars,as.numeric)%>%
     rowwise()%>%
     mutate_(.dots= setNames(paste0("max(",paste(vars,collapse=","),",na.rm = T)"),"vartmp"))%>%
-    arrange(desc(vartmp))%>%
-    select(-one_of(vars))
+    arrange(vartmp)%>%
+    select(-one_of(vars))%>%
+    rename_(.dots=setNames("vartmp",vars[1]))
+  
+  sub_usidnet_03<-sub_usidnet_03%>%
+    select(-one_of(vars))%>%
+    left_join(sub_tmp)
 }
 View(sub_usidnet)
 
