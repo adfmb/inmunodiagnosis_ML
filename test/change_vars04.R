@@ -64,7 +64,14 @@ nombres_dup<-nombres_dup[!nombres_dup%in%"patient"]
 ## sino también al nombre con el sujido .i que, para todos estos casos, es .1"
 ## por lo que ya se habia comentado de que estas vars sólo tienen 1 duplicado cada una
 nombres_dup2<-sort(c(as.character(nombres_dup),paste0(nombres_dup,".1")))
+## En este dataframe arastramos la variable 'patient' que será la llave para
+## los left_join pues ya tiene los datos correctos de todos sus duplicados 
+## y ademàs nos quedamos también con las variables que aparecen 2 veces
 sub_usidnet_03<-sub_usidnet_02[c("patient",as.character(nombres_dup2))]
+## Por otro lado nos quedamos con todas las variables que no están en el vector nombres_dup2
+## por lo tanto, todas las variables que ya no están duplicadas
+## provocando que la nueva var 'patient' también esté en este dataframe porque no está
+## en el vector nombres_dup2
 no_sub_usidnet_03<-sub_usidnet_02[!names(sub_usidnet_02)%in%as.character(nombres_dup2)]
 ncol(sub_usidnet_02)
 ncol(sub_usidnet_03)
@@ -75,6 +82,8 @@ nrow(sub_usidnet_03)
 nrow(no_sub_usidnet_03)
 
 sub_usidnet_04<-sub_usidnet_03
+## Omitimos la intrada i=1 porque pertenece al campo 'patient' y ese ya no tien duplicado
+## con sufijo .1
 for(idcol in c(2,4,6,8,10)){
   # idcol<-1
   idcol_next<-idcol+1
@@ -82,7 +91,7 @@ for(idcol in c(2,4,6,8,10)){
   print(vars)
   sub_tmp<-sub_usidnet_03%>%
     as_data_frame()%>%
-    select(one_of(c("patient",vars)))%>%
+    select(one_of(c("patient",vars)))%>% ## jalamos 'patient' para usarla de llave
     mutate_at(vars,as.character)%>%
     mutate_at(vars,as.numeric)%>%
     rowwise()%>%
@@ -92,14 +101,14 @@ for(idcol in c(2,4,6,8,10)){
     rename_(.dots=setNames("vartmp",vars[1]))
   
   sub_usidnet_04<-sub_usidnet_04%>%
-    select(-one_of(vars))%>%
-    left_join(sub_tmp)
+    select(-one_of(vars))%>% ##quitamos las vars duplicadas de sub_usidnet_04
+    left_join(sub_tmp) ## y pegamos la var corregida en sub_tmp by='patient'
 }
 
 
-usidnet_univar<-sub_usidnet_04%>%
-  left_join(no_sub_usidnet_03)
+usidnet_univar<-sub_usidnet_04%>% ## a la tabla sub_usidnet_04 ya corregida de duplicados 
+  left_join(no_sub_usidnet_03) ## le pegamos los campos no-duplicados by='patient'
 
-saveRDS(usidnet_univar,"data/usidnet_univar.rds")
+saveRDS(usidnet_univar,"data/usidnet_univar.rds") ## <- Base a utilizar!!!
 
 usidnet_univar<-readRDS("data/usidnet_univar.rds")
