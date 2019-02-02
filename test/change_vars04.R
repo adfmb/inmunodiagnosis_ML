@@ -30,6 +30,12 @@ nombres_dup<-df_names$Var1[df_names$Freq>1]
 USIDNET2<-USIDNET[names(USIDNET)%in%names(USIDNET)] #con este paso, R pone sufijo .i a los campos repetidos
 names(USIDNET2)[names(USIDNET2)%in%as.character(nombres_dup)]
 names(USIDNET2[names(USIDNET2)%in%as.character(nombres_dup)])
+
+## Pasamos la información de las diversas variables de 'patient' a una sola variable
+## Este proceso lo hacemos separado de las demás variables que están duplicadas porque 
+## Es la única variable (patient) que aparece más de 2 veces... 
+## Para las demás variables (nombres_dup[!nombres_dup%in%"patient"]) lo hacemos con un loop porque 
+## comparten el hecho de que son 2 duplicados por var
 vars<-c("patient","patient.1","patient.2","patient.3")
 sub_usidnet_02<-USIDNET2%>%
   as_data_frame()%>%
@@ -44,9 +50,10 @@ sub_usidnet_02<-USIDNET2%>%
   rename(patient=vartmp)
 sub_usidnet_02%>%select(patient)
 sum(is.infinite(sub_usidnet_02$patient))
+sum(is.na(sub_usidnet_02$patient))
 View(names(sub_usidnet_02))
 
-nombres_dup<-df_names$Var1[df_names$Freq>1]
+# nombres_dup<-df_names$Var1[df_names$Freq>1] ## ya se tiene este objeto en lìneas anteriores
 nombres_dup<-nombres_dup[!nombres_dup%in%"patient"]
 nombres_dup2<-sort(c(as.character(nombres_dup),paste0(nombres_dup,".1")))
 sub_usidnet_03<-sub_usidnet_02[c("patient",as.character(nombres_dup2))]
