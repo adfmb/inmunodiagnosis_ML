@@ -27,7 +27,7 @@ df_names<-df_names%>%
 
 nombres_dup<-df_names$Var1[df_names$Freq>1]
 
-USIDNET2<-USIDNET[names(USIDNET)%in%names(USIDNET)]
+USIDNET2<-USIDNET[names(USIDNET)%in%names(USIDNET)] #con este paso, R pone sufijo .i a los campos repetidos
 names(USIDNET2)[names(USIDNET2)%in%as.character(nombres_dup)]
 names(USIDNET2[names(USIDNET2)%in%as.character(nombres_dup)])
 vars<-c("patient","patient.1","patient.2","patient.3")
@@ -86,3 +86,5 @@ usidnet_univar<-sub_usidnet_04%>%
   left_join(no_sub_usidnet_03)
 
 saveRDS(usidnet_univar,"data/usidnet_univar.rds")
+
+usidnet_univar<-readRDS("data/usidnet_univar.rds")
