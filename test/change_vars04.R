@@ -1,7 +1,8 @@
 USIDNET0<-read.csv("data/USIDNET.csv",header=F,sep=",",fileEncoding = "cp932")
-names(USIDNET)
-View(head(USIDNET))
-saveRDS(USIDNET,"data/USIDNET.rds")
+names(USIDNET0)
+View(head(USIDNET0))
+saveRDS(USIDNET0,"data/USIDNET.rds")
+USIDNET0<-readRDS("data/USIDNET.rds")
 
 USIDNET<-USIDNET0[-1,]
 names(USIDNET)<-as.character(as.matrix(USIDNET0)[1,])
@@ -14,7 +15,9 @@ names(USIDNET)<-gsub("\\\n","__",names(USIDNET))
 names(USIDNET)<-gsub(",","_",names(USIDNET))
 names(USIDNET)<-gsub("-","_",names(USIDNET))
 names(USIDNET)<-gsub(":","_",names(USIDNET))
-
+names(USIDNET)<-gsub(";","_",names(USIDNET))
+names(USIDNET)[1:10]
+as.character(as.matrix(USIDNET0)[1,1:10])
 
 df_names<-as.data.frame(table(names(USIDNET)))
 df_names<-df_names%>%
@@ -36,7 +39,9 @@ sub_usidnet_02<-USIDNET2%>%
   filter(!is.infinite(vartmp))%>%
   select(-one_of(vars))%>%
   rename(patient=vartmp)
-
+sub_usidnet_02%>%select(patient)
+sum(is.infinite(sub_usidnet_02$patient))
+View(names(sub_usidnet_02))
 
 nombres_dup<-df_names$Var1[df_names$Freq>1]
 nombres_dup<-nombres_dup[!nombres_dup%in%"patient"]
