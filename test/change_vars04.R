@@ -58,7 +58,11 @@ nrow(sub_usidnet_02)
 ncol(sub_usidnet_02)
 
 # nombres_dup<-df_names$Var1[df_names$Freq>1] ## ya se tiene este objeto en lìneas anteriores
+## Aquí nos quedamos sólo con las demás variables duplicadas que NO son 'patient'
 nombres_dup<-nombres_dup[!nombres_dup%in%"patient"]
+## Aquí duplicamos el vector de nombres_dup para incluir, no sólo al nombre original de la var
+## sino también al nombre con el sujido .i que, para todos estos casos, es .1"
+## por lo que ya se habia comentado de que estas vars sólo tienen 1 duplicado cada una
 nombres_dup2<-sort(c(as.character(nombres_dup),paste0(nombres_dup,".1")))
 sub_usidnet_03<-sub_usidnet_02[c("patient",as.character(nombres_dup2))]
 no_sub_usidnet_03<-sub_usidnet_02[!names(sub_usidnet_02)%in%as.character(nombres_dup2)]
