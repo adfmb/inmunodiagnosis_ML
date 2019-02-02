@@ -25,6 +25,8 @@ df_names<-df_names%>%
   as_data_frame()%>%
   arrange(desc(Freq))
 
+nombres_dup<-df_names$Var1[df_names$Freq>1]
+
 USIDNET2<-USIDNET[names(USIDNET)%in%names(USIDNET)]
 names(USIDNET2)[names(USIDNET2)%in%as.character(nombres_dup)]
 names(USIDNET2[names(USIDNET2)%in%as.character(nombres_dup)])
