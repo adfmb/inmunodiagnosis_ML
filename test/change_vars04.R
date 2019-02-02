@@ -46,12 +46,16 @@ sub_usidnet_02<-USIDNET2%>%
   mutate_(.dots= setNames(paste0("max(",paste(vars,collapse=","),",na.rm = T)"),"vartmp"))%>%
   arrange(vartmp)%>%
   filter(!is.infinite(vartmp))%>%
-  select(-one_of(vars))%>%
-  rename(patient=vartmp)
+  select(-one_of(vars))%>% ## Aquì quitamos las variables originales de 'patient' y 
+  rename(patient=vartmp) ## mantenemos sòlo la nva vartmp que aquì renombramos con 'patient'
 sub_usidnet_02%>%select(patient)
+## Confirmamos que todas las entradas de la nueva variable 'patient' no tenga
+## ni NA's ni Inf's
 sum(is.infinite(sub_usidnet_02$patient))
 sum(is.na(sub_usidnet_02$patient))
 View(names(sub_usidnet_02))
+nrow(sub_usidnet_02)
+ncol(sub_usidnet_02)
 
 # nombres_dup<-df_names$Var1[df_names$Freq>1] ## ya se tiene este objeto en lìneas anteriores
 nombres_dup<-nombres_dup[!nombres_dup%in%"patient"]
