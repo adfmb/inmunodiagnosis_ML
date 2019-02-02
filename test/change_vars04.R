@@ -112,3 +112,8 @@ usidnet_univar<-sub_usidnet_04%>% ## a la tabla sub_usidnet_04 ya corregida de d
 saveRDS(usidnet_univar,"data/usidnet_univar.rds") ## <- Base a utilizar!!!
 
 usidnet_univar<-readRDS("data/usidnet_univar.rds")
+df_names_univar<-as.data.frame(table(names(usidnet_univar)))
+df_names_univar<-df_names_univar%>%
+  as_data_frame()%>%
+  arrange(desc(Freq))
+

@@ -35,6 +35,9 @@ names(v_n)<-gsub("-","_",names(v_n))
 names(n_v)<-gsub(":","_",names(n_v))
 names(v_n)<-gsub(":","_",names(v_n))
 
+names(n_v)<-gsub(";","_",names(n_v))
+names(v_n)<-gsub(";","_",names(v_n))
+
 saveRDS(n_v,"data/nuevas_viejas_prueba01.rds")
 saveRDS(v_n,"data/viejas_nuevas_prueba01.rds")
 
