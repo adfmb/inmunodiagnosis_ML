@@ -1,7 +1,7 @@
 USIDNET0<-read.csv("data/USIDNET.csv",header=F,sep=",",fileEncoding = "cp932")
-names(USIDNET)
-View(head(USIDNET))
-saveRDS(USIDNET,"data/USIDNET.rds")
+names(USIDNET0)
+View(head(USIDNET0))
+saveRDS(USIDNET0,"data/USIDNET.rds")
 
 USIDNET<-USIDNET0[-1,]
 names(USIDNET)<-as.character(as.matrix(USIDNET0)[1,])
@@ -14,7 +14,7 @@ names(USIDNET)<-gsub("\\\n","__",names(USIDNET))
 names(USIDNET)<-gsub(",","_",names(USIDNET))
 names(USIDNET)<-gsub("-","_",names(USIDNET))
 names(USIDNET)<-gsub(":","_",names(USIDNET))
-
+names(USIDNET)<-gsub(";","_",names(USIDNET))
 
 df_names<-as.data.frame(table(names(USIDNET)))
 df_names<-df_names%>%
