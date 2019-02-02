@@ -19,6 +19,7 @@ names(USIDNET)<-gsub(";","_",names(USIDNET))
 names(USIDNET)[1:10]
 as.character(as.matrix(USIDNET0)[1,1:10])
 
+library(dplyr)
 df_names<-as.data.frame(table(names(USIDNET)))
 df_names<-df_names%>%
   as_data_frame()%>%
