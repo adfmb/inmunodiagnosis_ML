@@ -1,0 +1,91 @@
+---
+title: "Status Dx de la Base UIID"
+output:
+  html_document:
+    df_print: paged
+  html_notebook:
+    df_print: paged
+---
+
+## Llamando librerías
+```{r}
+library(ggplot2)
+library(dplyr)
+library(plotly)
+```
+
+## Leemos datos y agregamos Interpretación de Estatus
+```{r}
+base<-read.csv("../data/UIID_statusdx.csv",header=T)
+class(base)
+base<-base%>%
+  as_data_frame()%>%
+  mutate(EstatusDx=as.character(ESTATUDX),
+         EstatusDx=if_else(ESTATUDX==0,"C. Sin IDP",EstatusDx),
+         EstatusDx=if_else(ESTATUDX==1,"B. Con IDP",EstatusDx),
+         EstatusDx=if_else(ESTATUDX==2,"A. IDP en estudio",EstatusDx))
+class(base)
+base
+```
+
+```{r}
+gg01<-ggplot(data=base,aes(x=aniocons, fill=EstatusDx)) + 
+    geom_density(adjust=1.5, position="fill")
+# gg01
+```
+```{r}
+gg01_pl<-ggplotly(gg01)
+gg01_pl$x$layout$xaxis$title<-"Año de consulta"
+gg01_pl$x$layout$yaxis$title<-"densidad"
+gg01_pl
+```
+
+- El porcentaje de pacientes diagnosticados con IDP se mantiene constate o estable alrededor del **30%**.
+
+- Se observa que antes (*2011*) había una mayor proporción de casos en los que se descartaba IDP y, que hoy, parte de esa propoción de casos (**~30%**), pasó a ser **IDP en estudio**, mostrando ser hoy más minuciosos para confirmar o descartar el diagnóstico.
+
+## Agrupando por año
+```{r}
+gb01<-base%>%
+  group_by(aniocons)%>%
+  summarise(n_px=n(),
+            per_px=round(n_px/nrow(.),4))
+gb01
+```
+
+```{r}
+gb02<-base%>%
+  group_by(aniocons)%>%
+  mutate(n_px=n()#,
+         # per_px=round(n_px/nrow(.),4)
+         )%>%
+  ungroup()%>%
+  group_by(aniocons,ESTATUDX)%>%
+  mutate(n_st_anio=n(),
+         per_st_anio=round(n_st_anio/n_px,4))%>%
+  filter(row_number()==1)%>%
+  select(-Expediente)
+
+gb02
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
