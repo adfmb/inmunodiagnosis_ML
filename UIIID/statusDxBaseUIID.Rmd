@@ -77,7 +77,7 @@ gg02 <-ggplot(gb02, aes(aniocons, n_st_anio))+
 ```
 
 ```{r}
-gg02_pl<-ggplotly(gg01)
+gg02_pl<-ggplotly(gg02)
 gg02_pl$x$layout$xaxis$title<-"Año de consulta"
 gg02_pl$x$layout$yaxis$title<-"Frecuencia de casos"
 gg02_pl
