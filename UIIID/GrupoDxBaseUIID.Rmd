@@ -1,5 +1,5 @@
 ---
-title: "Status Dx de la Base UIID"
+title: "Distribución de Grupos Dx de la Base UIID"
 output:
   html_document:
     df_print: paged
@@ -11,22 +11,23 @@ output:
 ```{r}
 library(ggplot2)
 library(dplyr)
-library(plotly)
+# library(plotly)
 ```
 
 ## Leemos datos y agregamos Interpretación de Estatus
 ```{r}
 base<-read.csv("../data/UIID_20190201.csv",header=T)
-class(base)
+# class(base)
 base01<-base%>%
   as_data_frame()%>%
   select(gruposos,grupodx)%>%
   filter(grupodx!=0)
-class(base01)
+# class(base01)
 base01
 ```
 
 ## Distribución por grupo diagóstico
+
 ```{r}
 gg01<-ggplot(base01, aes(x=factor(1), fill=gruposos))+
   geom_bar(width = 1)+
@@ -43,7 +44,18 @@ gb01<-base01%>%
   rename(Grupo=gruposos)
 gb01
 ```
-
+```{r}
+## Create a basic bar
+pie00 <- ggplot(gb01, aes(x="", y=n_px, fill=Grupo)) + geom_bar(stat="identity", width=1)+
+  coord_polar("y", start=0) + geom_text(aes(label = n_px), position = position_stack(vjust = 0.5),size=2) +
+  scale_fill_manual(values=c("#55DDE0", "#33658A", "#2F4858", "#F6AE2D", "#F26419", "#999999","#CC6666", "#9999CC", "#66CC99")) +
+  labs(x = NULL, y = NULL, fill = NULL, title = "Grupos Diagnósticos (n)")+
+  theme_classic() + theme(axis.line = element_blank(),
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          plot.title = element_text(hjust = 0.5, color = "#666666"))
+pie00
+```
 
 ```{r}
 ## Create a basic bar
@@ -54,7 +66,7 @@ pie<- ggplot(gb01, aes(x="", y=per_px, fill=Grupo)) + geom_bar(stat="identity", 
 
 ```{r}
 ## Convert to pie (polar coordinates) and add labels
-pie <- pie+coord_polar("y", start=0) + geom_text(aes(label = paste0(round(per_px*100,4), "%")), position = position_stack(vjust = 0.5),size=1)
+pie <- pie+coord_polar("y", start=0) + geom_text(aes(label = paste0(round(per_px*100,4), "%")), position = position_stack(vjust = 0.5),size=2)
 
 # pie
 ```
@@ -69,7 +81,7 @@ pie<-pie + scale_fill_manual(values=c("#55DDE0", "#33658A", "#2F4858", "#F6AE2D"
 
 ```{r}
 # Remove labels and add title
-pie<-pie + labs(x = NULL, y = NULL, fill = NULL, title = "Grupos Diagnósticos")
+pie<-pie + labs(x = NULL, y = NULL, fill = NULL, title = "Grupos Diagnósticos (%)")
 # pie
 ```
 
