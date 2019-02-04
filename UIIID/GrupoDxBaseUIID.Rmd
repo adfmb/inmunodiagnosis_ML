@@ -52,36 +52,13 @@ pie00
 
 ```{r}
 ## Create a basic bar
-pie<- ggplot(gb01, aes(x="", y=per_px, fill=Grupo)) + geom_bar(stat="identity", width=1)
-# pie
-```
-
-
-```{r}
-## Convert to pie (polar coordinates) and add labels
-pie <- pie+coord_polar("y", start=0) + geom_text(aes(label = paste0(round(per_px*100,4), "%")), position = position_stack(vjust = 0.5),size=2)
-
-# pie
-```
-
-
-
-```{r}
-## Add color scale (hex colors)
-pie<-pie + scale_fill_manual(values=c("#55DDE0", "#33658A", "#2F4858", "#F6AE2D", "#F26419", "#999999","#CC6666", "#9999CC", "#66CC99")) 
-# pie
-```
-
-```{r}
-# Remove labels and add title
-pie<-pie + labs(x = NULL, y = NULL, fill = NULL, title = "Grupos Diagnósticos (%)")
-# pie
-```
-
-
-```{r}
-## Tidy up the theme
-pie <- pie + theme_classic() + theme(axis.line = element_blank(),
+pie<- ggplot(gb01, aes(x="", y=per_px, fill=Grupo)) + geom_bar(stat="identity", width=1) +
+  ## Convert to pie (polar coordinates) and add labels
+  coord_polar("y", start=0) + geom_text(aes(label = paste0(round(per_px*100,4), "%")), position = position_stack(vjust = 0.5),size=2) + 
+  ## Add color scale (hex colors)
+  scale_fill_manual(values=c("#55DDE0", "#33658A", "#2F4858", "#F6AE2D", "#F26419", "#999999","#CC6666", "#9999CC", "#66CC99"))  + 
+  # Remove labels and add title
+  labs(x = NULL, y = NULL, fill = NULL, title = "Grupos Diagnósticos (%)") + theme_classic() + theme(axis.line = element_blank(), ## Tidy up the theme
           axis.text = element_blank(),
           axis.ticks = element_blank(),
           plot.title = element_text(hjust = 0.5, color = "#666666"))
