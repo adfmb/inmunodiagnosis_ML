@@ -1,0 +1,116 @@
+---
+title: "Status Dx de la Base UIID"
+output:
+  html_document:
+    df_print: paged
+  html_notebook:
+    df_print: paged
+---
+
+## Llamando librerías
+```{r}
+library(ggplot2)
+library(dplyr)
+library(plotly)
+```
+
+## Leemos datos y agregamos Interpretación de Estatus
+```{r}
+base<-read.csv("../data/UIID_20190201.csv",header=T)
+class(base)
+base01<-base%>%
+  as_data_frame()%>%
+  select(gruposos,grupodx)%>%
+  filter(grupodx!=0)
+class(base01)
+base01
+```
+
+## Distribución por grupo diagóstico
+```{r}
+gg01<-ggplot(base01, aes(x=factor(1), fill=gruposos))+
+  geom_bar(width = 1)+
+  coord_polar("y")
+gg01
+```
+
+```{r}
+gb01<-base01%>%
+  group_by(gruposos)%>%
+  summarise(n_px=n(),
+            per_px=round(n_px/nrow(.),4),
+            porcentaje= paste0(formatC(100 * per_px, digits = 2, format = "f"), "%"))%>%
+  rename(Grupo=gruposos)
+gb01
+```
+
+
+```{r}
+bp<- ggplot(gb01, aes(x="", y=per_px, fill=Grupo))+
+geom_bar(width = 1, stat = "identity")
+bp
+# gg02 
+```
+
+
+```{r}
+pie <- bp + coord_polar("y", start=0)
+pie
+```
+
+
+```{r}
+blank_theme <- theme_minimal()+
+  theme(
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  panel.border = element_blank(),
+  panel.grid=element_blank(),
+  axis.ticks = element_blank(),
+  plot.title=element_text(size=14, face="bold")
+  )
+```
+
+```{r}
+pie<-pie + scale_fill_brewer("Blues") + blank_theme +
+  theme(axis.text.x=element_blank())
+```
+
+
+
+## Create a basic bar
+```{r}
+pie<- ggplot(gb01, aes(x="", y=per_px, fill=Grupo)) + geom_bar(stat="identity", width=1)
+pie
+```
+
+## Convert to pie (polar coordinates) and add labels
+```{r}
+pie <- pie+coord_polar("y", start=0) + geom_text(aes(label = paste0(round(per_px*100,4), "%")), position = position_stack(vjust = 0.5),size=1)
+
+pie
+```
+
+
+
+## Add color scale (hex colors)
+```{r}
+pie<-pie + scale_fill_manual(values=c("#55DDE0", "#33658A", "#2F4858", "#F6AE2D", "#F26419", "#999999","#CC6666", "#9999CC", "#66CC99")) 
+pie
+```
+
+```{r}
+# Remove labels and add title
+pie<-pie + labs(x = NULL, y = NULL, fill = NULL, title = "Grupos Diagnósticos")
+pie
+```
+
+## Tidy up the theme
+```{r}
+pie <- pie + theme_classic() + theme(axis.line = element_blank(),
+          axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          plot.title = element_text(hjust = 0.5, color = "#666666"))
+pie
+```
+
