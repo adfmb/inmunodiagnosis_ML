@@ -29,13 +29,6 @@ base01
 ## Distribución por grupo diagóstico
 
 ```{r}
-gg01<-ggplot(base01, aes(x=factor(1), fill=gruposos))+
-  geom_bar(width = 1)+
-  coord_polar("y")
-gg01
-```
-
-```{r}
 gb01<-base01%>%
   group_by(gruposos)%>%
   summarise(n_px=n(),
