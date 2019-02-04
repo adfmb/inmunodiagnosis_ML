@@ -14,7 +14,7 @@ library(dplyr)
 # library(plotly)
 ```
 
-## Leemos datos y agregamos Interpretación de Estatus
+## Leemos datos
 ```{r}
 base<-read.csv("../data/UIID_20190201.csv",header=T)
 # class(base)
