@@ -5,6 +5,8 @@ output:
     df_print: paged
   html_notebook:
     df_print: paged
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## Llamando librerías
@@ -52,9 +54,9 @@ pie00
 
 ```{r}
 ## Create a basic bar
-pie<- ggplot(gb01, aes(x="", y=per_px, fill=Grupo)) + geom_bar(stat="identity", width=1) +
+pie01<- ggplot(gb01, aes(x="", y=per_px, fill=Grupo)) + geom_bar(stat="identity", width=1) +
   ## Convert to pie (polar coordinates) and add labels
-  coord_polar("y", start=0) + geom_text(aes(label = paste0(round(per_px*100,4), "%")), position = position_stack(vjust = 0.5),size=2) + 
+  coord_polar("y", start=0) + geom_text(aes(label = paste0(round(per_px*100,4), "%")), position = position_stack(vjust =0.5),size=2) + 
   ## Add color scale (hex colors)
   scale_fill_manual(values=c("#55DDE0", "#33658A", "#2F4858", "#F6AE2D", "#F26419", "#999999","#CC6666", "#9999CC", "#66CC99"))  + 
   # Remove labels and add title
@@ -62,6 +64,14 @@ pie<- ggplot(gb01, aes(x="", y=per_px, fill=Grupo)) + geom_bar(stat="identity", 
           axis.text = element_blank(),
           axis.ticks = element_blank(),
           plot.title = element_text(hjust = 0.5, color = "#666666"))
-pie
+pie01
 ```
 
+
+```{r}
+## Create pichart with pie() function
+color<-c("#55DDE0", "#33658A", "#2F4858", "#F6AE2D", "#F26419", "#999999","#CC6666", "#9999CC", "#66CC99")
+#,col=c("#55DDE0", "#33658A", "#2F4858", "#F6AE2D", "#F26419", "#999999","#CC6666", "#9999CC", "#66CC99"))
+# c("yellow2","olivedrab3","orangered3","lightblue","red","orange","pink","black","darkblue")
+pie(gb01$per_px,labels=gb01$porcentaje,clockwise=T,main="Grupos Diagnósticos (%)",col=color)
+legend("topleft",legend=as.character(gb01$Grupo),cex=0.35,fill=color)
