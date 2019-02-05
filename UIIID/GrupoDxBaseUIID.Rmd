@@ -75,3 +75,5 @@ color<-c("#55DDE0", "#33658A", "#2F4858", "#F6AE2D", "#F26419", "#999999","#CC66
 # c("yellow2","olivedrab3","orangered3","lightblue","red","orange","pink","black","darkblue")
 pie(gb01$per_px,labels=gb01$porcentaje,clockwise=T,main="Grupos Diagnósticos (%)",col=color)
 legend("topleft",legend=as.character(gb01$Grupo),cex=0.35,fill=color)
+
+```
