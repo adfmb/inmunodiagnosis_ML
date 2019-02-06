@@ -1,0 +1,65 @@
+---
+title: "Explorando AADXIDP - 01"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+```{r}
+base01<-read.table(file = "../data/AADXIDP_n234_20160805.csv",header=T,sep=",")
+base01$EXP<-as.character(base01$EXP)
+head(base01)
+```
+
+
+```{r}
+base02<-read.csv(file = "../data/AADXIDP_n234_20160805.csv",header=T)
+head(base02)
+```
+
+```{r}
+names(base01)
+```
+
+```{r}
+unique(base01$EXP)
+```
+```{r}
+exps_dif<-length(unique(base01$EXP))
+casos_dif<-nrow(base01)
+```
+
+- Esta tabla, en la variable **EXP** tiene `r exps_dif` expedientes diferentes
+
+- La misma tabla, tiene un total de `r casos_dif` filas o casos diferentes
+
+- otra coas: `r sqrt(45)` 
+
+## Usando la paquetería base de R
+```{r}
+## Este es un comentario dentro de un chunk de R
+# esto no se va a ejecutar: sqrt(45)` 
+
+
+tbl_exp_01<-as.data.frame(table(base01$EXP))
+head(tbl_exp_01)
+```
+```{r}
+sub_tbl_exp_01<-tbl_exp_01[tbl_exp_01$Freq>1,]
+sub_tbl_exp_01
+```
+```{r}
+exp_dup<-as.character(sub_tbl_exp_01$Var1)
+exp_dup
+```
+```{r}
+dups_base01<-base01[base01$EXP%in%exp_dup,]
+View(dups_base01)
+```
+```{r}
+
+```
+```{r}
+
+```
