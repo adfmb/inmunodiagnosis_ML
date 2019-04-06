@@ -1,6 +1,7 @@
 ---
 title: "Explorando AADXIDP - 01"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
@@ -56,6 +57,8 @@ exp_dup
 ```{r}
 dups_base01<-base01[base01$EXP%in%exp_dup,]
 View(dups_base01)
+
+?glm
 ```
 ```{r}
 
